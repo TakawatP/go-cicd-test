@@ -2,13 +2,12 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE = 'sonarqube' // matches Jenkins SonarQube server name
+        SONARQUBE = 'sonarqube' // Jenkins SonarQube name from Configure System
         GOPATH = "${env.WORKSPACE}/go"
     }
 
     tools {
-        go 'go_1.24'               // Use the name configured in Jenkins
-        sonarScanner 'sccli' // Matches the SonarQube Scanner name
+        go 'go_1.24'  // Replace with your Go tool name in Jenkins
     }
 
     stages {
