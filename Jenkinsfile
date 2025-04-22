@@ -2,12 +2,13 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE = 'sonarqube' // Name of your SonarQube config in Jenkins
+        SONARQUBE = 'sonarqube' // matches Jenkins SonarQube server name
         GOPATH = "${env.WORKSPACE}/go"
     }
 
     tools {
-        go 'go_1.24' // Replace with your configured Go tool name in Jenkins
+        go 'go_1.24'               // Use the name configured in Jenkins
+        sonarScanner 'sonarscannercli' // Matches the SonarQube Scanner name
     }
 
     stages {
@@ -33,14 +34,12 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv("${env.SONARQUBE}") {
-                    sh """
+                    sh '''
                         sonar-scanner \
                         -Dsonar.projectKey=go-cicd-test \
                         -Dsonar.sources=. \
-                        -Dsonar.go.coverage.reportPaths=report.out \
-                        -Dsonar.host.url=$SONAR_HOST_URL \
-                        -Dsonar.login=$SONAR_AUTH_TOKEN
-                    """
+                        -Dsonar.go.coverage.reportPaths=report.out
+                    '''
                 }
             }
         }
@@ -56,7 +55,6 @@ pipeline {
 
     post {
         always {
-            junit 'report.out' // if you have test results in JUnit format
             cleanWs()
         }
     }
