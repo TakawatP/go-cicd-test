@@ -33,12 +33,15 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv("${env.SONARQUBE}") {
-                    sh '''
-                        sonar-scanner \
-                        -Dsonar.projectKey=go-cicd-test \
-                        -Dsonar.sources=. \
-                        -Dsonar.go.coverage.reportPaths=report.out
-                    '''
+                    script {
+                        scannerHome = tool name: 'SonarScannerCLI', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=go-cicd-test \
+                            -Dsonar.sources=. \
+                            -Dsonar.go.coverage.reportPaths=report.out
+                        """
+                    }
                 }
             }
         }
