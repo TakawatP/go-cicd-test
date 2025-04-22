@@ -8,7 +8,7 @@ pipeline {
 
     tools {
         go 'go_1.24'               // Use the name configured in Jenkins
-        sonarScanner 'sonarscannercli' // Matches the SonarQube Scanner name
+        sonarScanner 'sccli' // Matches the SonarQube Scanner name
     }
 
     stages {
